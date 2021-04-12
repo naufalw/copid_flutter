@@ -23,7 +23,7 @@ class HomeScreenState extends State<HomeScreen> {
   var dio = Dio();
   DataCovid _datacovid = new DataCovid();
   final box = GetStorage();
-  String countryName, countryID, temporaryCountryName;
+  String countryName, countryID, temporaryCountryName, temporaryCountryIDSlug;
   Map covidData = {};
 
   void getAllData() async {
@@ -87,13 +87,17 @@ class HomeScreenState extends State<HomeScreen> {
                                 SearchChoices.single(
                                   menuBackgroundColor:
                                       Theme.of(context).canvasColor,
-                                  items: allCountryList(),
+                                  items: allCountryList,
                                   value: countryName,
                                   hint: countryName,
                                   isExpanded: true,
                                   onChanged: (a) {
                                     setState(() {
-                                      temporaryCountryName = a;
+                                      temporaryCountryIDSlug = a;
+                                      temporaryCountryName = allCountryItem[
+                                          countryIndex.indexOf(a)]["Country"];
+                                      print(temporaryCountryIDSlug);
+                                      print(temporaryCountryName);
                                     });
                                   },
                                 ),
@@ -106,9 +110,10 @@ class HomeScreenState extends State<HomeScreen> {
                                       child: Text("Ok"),
                                       onPressed: () async {
                                         Get.back();
+
                                         _controller.callRefresh();
                                         Map newCovidData = await DataCovid()
-                                            .getData(temporaryCountryName);
+                                            .getData(temporaryCountryIDSlug);
                                         if (newCovidData != null) {
                                           _controller.finishRefresh(
                                               success: true);
@@ -121,7 +126,8 @@ class HomeScreenState extends State<HomeScreen> {
                                             message:
                                                 "Last update : ${newCovidData["latestDate"]}",
                                           ));
-                                          box.write('countryID', countryName);
+                                          box.write('countryID',
+                                              temporaryCountryIDSlug);
                                           box.write('countryName', countryName);
                                           setState(() {
                                             _controller.finishRefresh(
