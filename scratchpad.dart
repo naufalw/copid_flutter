@@ -2,55 +2,313 @@ import "package:dio/dio.dart";
 
 getData() async {
   var dio = Dio();
-  var request = await dio.get(
-      "https://api.covid19api.com/live/country/China/status/confirmed/date/2021-04-05T00:00:00Z");
-  List data = request.data;
-  // confirmedCaseProgress = [],
-  // deathCaseProgress = [],
-  // activeCaseProgress = [],
-  // recoveredCaseProgress = [];
-  int confirmedSatuHari = 0,
-      deathSatuHari = 0,
-      activeSatuHari = 0,
-      recoveredSatuHari = 0,
-      index = 0;
-  List country = [];
-  String date;
-  for (var i = 0; i < data.length; i++) {
-    if (country.contains(data[i]["Province"]) == false) {
-      country.add(data[i]["Province"]);
-    }
+  var request = await dio.get("https://api.covid19api.com/countries");
+  List<String> allCountry = [];
+  for (var i = 0; i < request.data.length; i++) {
+    allCountry.add('"${request.data[i]["Country"]}"');
   }
+  // var request = await dio.get(
+  //     "https://api.covid19api.com/live/country/China/status/confirmed/date/2021-04-05T00:00:00Z");
+  // List data = request.data;
+  // // confirmedCaseProgress = [],
+  // // deathCaseProgress = [],
+  // // activeCaseProgress = [],
+  // // recoveredCaseProgress = [];
+  // int confirmedSatuHari = 0,
+  //     deathSatuHari = 0,
+  //     activeSatuHari = 0,
+  //     recoveredSatuHari = 0,
+  //     index = 0;
+  // List country = [];
+  // String date;
+  // for (var i = 0; i < data.length; i++) {
+  //   if (country.contains(data[i]["Province"]) == false) {
+  //     country.add(data[i]["Province"]);
+  //   }
+  // }
 
-  List listDataCovid = [];
-  int howManyCountry = country.length;
-  double howManyDay = data.length / country.length;
-  for (var i = 0; i < howManyDay; i++) {
-    confirmedSatuHari = 0;
-    deathSatuHari = 0;
-    activeSatuHari = 0;
-    recoveredSatuHari = 0;
-    for (var i = 0; i < howManyCountry; i++) {
-      confirmedSatuHari += data[index]["Confirmed"];
-      activeSatuHari += data[index]["Active"];
-      recoveredSatuHari += data[index]["Recovered"];
-      deathSatuHari += data[index]["Deaths"];
-      date = data[index]["Date"];
-      index += 1;
-    }
+  // List listDataCovid = [];
+  // int howManyCountry = country.length;
+  // double howManyDay = data.length / country.length;
+  // for (var i = 0; i < howManyDay; i++) {
+  //   confirmedSatuHari = 0;
+  //   deathSatuHari = 0;
+  //   activeSatuHari = 0;
+  //   recoveredSatuHari = 0;
+  //   for (var i = 0; i < howManyCountry; i++) {
+  //     confirmedSatuHari += data[index]["Confirmed"];
+  //     activeSatuHari += data[index]["Active"];
+  //     recoveredSatuHari += data[index]["Recovered"];
+  //     deathSatuHari += data[index]["Deaths"];
+  //     date = data[index]["Date"];
+  //     index += 1;
+  //   }
 
-    listDataCovid.add({
-      "Confirmed": confirmedSatuHari,
-      "Recovered": recoveredSatuHari,
-      "Deaths": deathSatuHari,
-      "Active": activeSatuHari,
-      "Date": date
-    });
-  }
-  print("Cino");
-  print(listDataCovid);
+  //   listDataCovid.add({
+  //     "Confirmed": confirmedSatuHari,
+  //     "Recovered": recoveredSatuHari,
+  //     "Deaths": deathSatuHari,
+  //     "Active": activeSatuHari,
+  //     "Date": date
+  //   });
+  // }
+  // print("Cino");
+  // print(listDataCovid);
 }
 
 main() {
   getData();
+
+  final List<String> fruits = <String>[
+    "Djibouti",
+    "Guatemala",
+    "Réunion",
+    "Saudi Arabia",
+    "Comoros",
+    "Czech Republic",
+    "Falkland Islands (Malvinas)",
+    "Guyana",
+    "Lao PDR",
+    "Nauru",
+    "Peru",
+    "Hungary",
+    "Indonesia",
+    "Turks and Caicos Islands",
+    "ALA Aland Islands",
+    "Bangladesh",
+    "Croatia",
+    "Hong Kong, SAR China",
+    "Kiribati",
+    "Saint Vincent and Grenadines",
+    "Bouvet Island",
+    "Liberia",
+    "Malaysia",
+    "Romania",
+    "Ukraine",
+    "Afghanistan",
+    "Belgium",
+    "Ethiopia",
+    "Korea (South)",
+    "Luxembourg",
+    "Singapore",
+    "Cambodia",
+    "Mozambique",
+    "Seychelles",
+    "Brunei Darussalam",
+    "French Guiana",
+    "Holy See (Vatican City State)",
+    "Azerbaijan",
+    "British Virgin Islands",
+    "Burundi",
+    "Fiji",
+    "Northern Mariana Islands",
+    "Russian Federation",
+    "Lesotho",
+    "Thailand",
+    "Benin",
+    "Montenegro",
+    "United States of America",
+    "Martinique",
+    "Sierra Leone",
+    "Sudan",
+    "Yemen",
+    "Zambia",
+    "Aruba",
+    "Guernsey",
+    "Guinea",
+    "Heard and Mcdonald Islands",
+    "Eritrea",
+    "French Polynesia",
+    "Germany",
+    "Micronesia, Federated States of",
+    "Sao Tome and Principe",
+    "Sweden",
+    "American Samoa",
+    "Andorra",
+    "Bosnia and Herzegovina",
+    "Australia",
+    "Dominican Republic",
+    "Oman",
+    "Saint Pierre and Miquelon",
+    "Mexico",
+    "Niue",
+    "Qatar",
+    "Tonga",
+    "Albania",
+    "Uzbekistan",
+    "Moldova",
+    "Suriname",
+    "Austria",
+    "Kenya",
+    "Faroe Islands",
+    "Gambia",
+    "Iraq",
+    "Uganda",
+    "Costa Rica",
+    "Malta",
+    "Zimbabwe",
+    "Bahrain",
+    "Belarus",
+    "Vanuatu",
+    "Cayman Islands",
+    "Ireland",
+    "Mauritania",
+    "Norway",
+    "El Salvador",
+    "Guinea-Bissau",
+    "Saint-Martin (French part)",
+    "Equatorial Guinea",
+    "Mayotte",
+    "Wallis and Futuna Islands",
+    "Liechtenstein",
+    "Marshall Islands",
+    "Netherlands Antilles",
+    "Brazil",
+    "Israel",
+    "Lithuania",
+    "Puerto Rico",
+    "Gabon",
+    "Serbia",
+    "South Georgia and the South Sandwich Islands",
+    "Tunisia",
+    "Dominica",
+    "Mauritius",
+    "Montserrat",
+    "Botswana",
+    "Cameroon",
+    "Macedonia, Republic of",
+    "Republic of Kosovo",
+    "Chad",
+    "Saint Kitts and Nevis",
+    "Colombia",
+    "New Zealand",
+    "Nicaragua",
+    "Paraguay",
+    "Somalia",
+    "South Sudan",
+    "Spain",
+    "Cape Verde",
+    "Lebanon",
+    "Maldives",
+    "Pakistan",
+    "US Minor Outlying Islands",
+    "Bermuda",
+    "Christmas Island",
+    "Finland",
+    "Norfolk Island",
+    "Canada",
+    "Monaco",
+    "Slovenia",
+    "Bhutan",
+    "British Indian Ocean Territory",
+    "New Caledonia",
+    "Niger",
+    "Slovakia",
+    "Svalbard and Jan Mayen Islands",
+    "Turkmenistan",
+    "Western Sahara",
+    "Angola",
+    "Gibraltar",
+    "Nepal",
+    "San Marino",
+    "Iran, Islamic Republic of",
+    "Pitcairn",
+    "Swaziland",
+    "Congo (Kinshasa)",
+    "Cuba",
+    "Georgia",
+    "Jamaica",
+    "Mali",
+    "Papua New Guinea",
+    "Saint-Barthélemy",
+    "Estonia",
+    "Virgin Islands, US",
+    "Bulgaria",
+    "Cocos (Keeling) Islands",
+    "Jordan",
+    "Latvia",
+    "Taiwan, Republic of China",
+    "Trinidad and Tobago",
+    "Egypt",
+    "Greece",
+    "Grenada",
+    "Namibia",
+    "Poland",
+    "Senegal",
+    "Panama",
+    "Venezuela (Bolivarian Republic)",
+    "Kyrgyzstan",
+    "Rwanda",
+    "Switzerland",
+    "Viet Nam",
+    "Korea (North)",
+    "Myanmar",
+    "Portugal",
+    "Syrian Arab Republic (Syria)",
+    "Tajikistan",
+    "Timor-Leste",
+    "Bahamas",
+    "Guadeloupe",
+    "Tokelau",
+    "Anguilla",
+    "Bolivia",
+    "Burkina Faso",
+    "Togo",
+    "Côte d'Ivoire",
+    "Morocco",
+    "Samoa",
+    "South Africa",
+    "Tuvalu",
+    "United Kingdom",
+    "Jersey",
+    "Uruguay",
+    "Antarctica",
+    "Madagascar",
+    "Belize",
+    "Cyprus",
+    "Haiti",
+    "Kuwait",
+    "Malawi",
+    "Solomon Islands",
+    "Honduras",
+    "Mongolia",
+    "Netherlands",
+    "Palau",
+    "Philippines",
+    "Turkey",
+    "Cook Islands",
+    "India",
+    "Isle of Man",
+    "Japan",
+    "Nigeria",
+    "Saint Lucia",
+    "China",
+    "Tanzania, United Republic of",
+    "Italy",
+    "Libya",
+    "Sri Lanka",
+    "Argentina",
+    "French Southern Territories",
+    "Antigua and Barbuda",
+    "Armenia",
+    "Congo (Brazzaville)",
+    "Denmark",
+    "Ecuador",
+    "Ghana",
+    "Iceland",
+    "Kazakhstan",
+    "United Arab Emirates",
+    "Barbados",
+    "Chile",
+    "Greenland",
+    "Algeria",
+    "Central African Republic",
+    "Guam",
+    "Palestinian Territory",
+    "France",
+    "Macao, SAR China",
+    "Saint Helena"
+  ];
+  fruits.sort();
+  print(fruits);
 }

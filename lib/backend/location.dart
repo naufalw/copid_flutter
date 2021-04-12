@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocode/geocode.dart';
 
-Future<String> getCurrentCountry() async {
+Future<Map<String, String>> getCurrentCountry() async {
   LocationPermission permission;
   var dio = Dio();
   permission = await Geolocator.checkPermission();
@@ -20,5 +20,5 @@ Future<String> getCurrentCountry() async {
   String currentCountry = currentHumanLocation.countryCode;
   var countryRequests =
       await dio.get("https://restcountries.eu/rest/v2/alpha/$currentCountry");
-  return countryRequests.data["name"];
+  return {"name": countryRequests.data["name"], "id": currentCountry};
 }
