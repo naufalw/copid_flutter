@@ -49,6 +49,15 @@ class SidebarDrawer extends StatelessWidget {
         ),
         ListTile(
           title: Text("Settings"),
+        ),
+        ListTile(
+          title: Text("About"),
+          onTap: () {
+            showAboutDialog(
+                context: context,
+                applicationName: "Copid App",
+                applicationVersion: "1.0.0+1");
+          },
         )
       ],
     ));

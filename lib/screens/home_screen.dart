@@ -1,4 +1,3 @@
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:copid_flutter/backend/location.dart';
 import 'package:copid_flutter/backend/rest_api.dart';
