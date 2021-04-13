@@ -1,9 +1,11 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:copid_flutter/backend/location.dart';
 import 'package:copid_flutter/backend/rest_api.dart';
 import 'package:copid_flutter/components/all_country.dart';
 import 'package:copid_flutter/components/font_size.dart';
 import 'package:copid_flutter/components/home_container_small.dart';
+import 'package:copid_flutter/components/sidebar_drawer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -66,52 +68,59 @@ class HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      drawer: Drawer(
-        child: Column(),
-      ),
+      drawer: SidebarDrawer(),
       appBar: AppBar(
         centerTitle: true,
         title: AutoSizeText(
           countryName,
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: FontSize.fontSize22),
+              fontWeight: FontWeight.bold,
+              fontSize: FontSize.fontSize22,
+              color: Get.isDarkMode ? Colors.white : Colors.black),
         ),
         actions: [
           InkWell(
               child: Icon(LineIcons.searchLocation),
               onTap: () {
                 Get.defaultDialog(
+                    actions: [
+                      ButtonBar(
+                        children: [
+                          TextButton(
+                              child: Text("Cancel"),
+                              onPressed: () => Get.back()),
+                          TextButton(
+                            child: Text("Ok"),
+                            onPressed: () async {
+                              Get.back();
+                              _controller.callRefresh();
+                              Map newCovidData = await DataCovid()
+                                  .getData(temporaryCountryIDSlug);
+                              if (newCovidData != null) {
+                                _controller.finishRefresh(success: true);
+                                countryName = temporaryCountryName;
+                                Get.showSnackbar(GetBar(
+                                  title:
+                                      "SUCCESS!, country changed to : $countryName",
+                                  duration: Duration(milliseconds: 1800),
+                                  message:
+                                      "Last update : ${newCovidData["latestDate"]}",
+                                ));
+                                box.write('countryID', temporaryCountryIDSlug);
+                                box.write('countryName', countryName);
+                                setState(() {
+                                  _controller.finishRefresh(success: true);
+                                  covidData = newCovidData;
+                                });
+                              }
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                    radius: 0.0,
                     title: "Select Country",
                     backgroundColor: Theme.of(context).canvasColor,
-                    confirm: TextButton(
-                      child: Text("Ok"),
-                      onPressed: () async {
-                        Get.back();
-
-                        _controller.callRefresh();
-                        Map newCovidData =
-                            await DataCovid().getData(temporaryCountryIDSlug);
-                        if (newCovidData != null) {
-                          _controller.finishRefresh(success: true);
-                          countryName = temporaryCountryName;
-                          Get.showSnackbar(GetBar(
-                            title:
-                                "SUCCESS!, country changed to : $countryName",
-                            duration: Duration(milliseconds: 1800),
-                            message:
-                                "Last update : ${newCovidData["latestDate"]}",
-                          ));
-                          box.write('countryID', temporaryCountryIDSlug);
-                          box.write('countryName', countryName);
-                          setState(() {
-                            _controller.finishRefresh(success: true);
-                            covidData = newCovidData;
-                          });
-                        }
-                      },
-                    ),
-                    cancel: TextButton(
-                        child: Text("Cancel"), onPressed: () => Get.back()),
                     content: Container(
                       color: Theme.of(context).canvasColor,
                       child: Column(
