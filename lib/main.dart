@@ -12,13 +12,30 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  ThemeMode getThemeMode() {
+    final box = GetStorage();
+    String _themeMode = box.read("themeMode");
+
+    if (_themeMode == "light") {
+      return ThemeMode.light;
+    } else if (_themeMode == "dark") {
+      return ThemeMode.dark;
+    } else {
+      if (Get.isPlatformDarkMode == true) {
+        return ThemeMode.dark;
+      } else {
+        return ThemeMode.light;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: Size(411.42857142857144, 820.5714285714286),
       builder: () => GetMaterialApp(
         title: 'Copid App',
-        themeMode: ThemeMode.dark,
+        themeMode: getThemeMode(),
         defaultTransition: Transition.zoom,
         theme: klightTheme,
         darkTheme: kdarkTheme,
