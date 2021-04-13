@@ -15,8 +15,22 @@ class _MainScreenState extends State<MainScreen> {
     BottomNavigationBarItem(
         icon: Icon(LineIcons.newspaper), label: "News", tooltip: "News")
   ];
-  int _currentIndex = 0;
-  List<Widget> screenIndex = [HomeScreen(), NewsScreen()];
+  int _currentIndex;
+  List<Widget> screenIndex;
+  PageController _pageController;
+  @override
+  void initState() {
+    super.initState();
+    screenIndex = [HomeScreen(), NewsScreen()];
+    _currentIndex = 0;
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +42,14 @@ class _MainScreenState extends State<MainScreen> {
           onTap: (index) {
             setState(() {
               _currentIndex = index;
+              _pageController.jumpToPage(index);
             });
           },
         ),
-        body: screenIndex[_currentIndex]);
+        body: PageView(
+          controller: _pageController,
+          physics: NeverScrollableScrollPhysics(),
+          children: screenIndex,
+        ));
   }
 }

@@ -2,11 +2,12 @@ import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:copid_flutter/backend/location.dart';
 import 'package:copid_flutter/backend/rest_api.dart';
 import 'package:copid_flutter/components/all_country.dart';
+import 'package:copid_flutter/components/font_size.dart';
 import 'package:copid_flutter/components/home_container_small.dart';
-import 'package:customizable_space_bar/customizable_space_bar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -18,7 +19,8 @@ class HomeScreen extends StatefulWidget {
   HomeScreenState createState() => HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin<HomeScreen> {
   EasyRefreshController _controller = EasyRefreshController();
   var dio = Dio();
   DataCovid _datacovid = new DataCovid();
@@ -35,7 +37,7 @@ class HomeScreenState extends State<HomeScreen> {
       if (covidData != null) {
         Get.showSnackbar(GetBar(
           title: "SUCCESS, country name : $countryName",
-          duration: Duration(milliseconds: 2500),
+          duration: Duration(milliseconds: 1800),
           message: "Last update : ${covidData["latestDate"]}",
         ));
         setState(() {});
@@ -43,7 +45,7 @@ class HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       Get.showSnackbar(GetBar(
         title: "ERROR",
-        duration: Duration(milliseconds: 2500),
+        duration: Duration(milliseconds: 1800),
         message: e.toString(),
       ));
     }
@@ -62,87 +64,79 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
+      drawer: Drawer(
+        child: Column(),
+      ),
       appBar: AppBar(
+        centerTitle: true,
         title: AutoSizeText(
           countryName,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: FontSize.fontSize22),
         ),
-        leading: Icon(LineIcons.mapPin),
         actions: [
           InkWell(
               child: Icon(LineIcons.searchLocation),
               onTap: () {
-                showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          insetPadding: EdgeInsets.zero,
-                          backgroundColor: Theme.of(context).canvasColor,
-                          content: Container(
-                            color: Theme.of(context).canvasColor,
-                            height: 135,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SearchChoices.single(
-                                  menuBackgroundColor:
-                                      Theme.of(context).canvasColor,
-                                  items: allCountryList,
-                                  value: countryName,
-                                  hint: countryName,
-                                  isExpanded: true,
-                                  onChanged: (a) {
-                                    setState(() {
-                                      temporaryCountryIDSlug = a;
-                                      temporaryCountryName = allCountryItem[
-                                          countryIndex.indexOf(a)]["Country"];
-                                      print(temporaryCountryIDSlug);
-                                      print(temporaryCountryName);
-                                    });
-                                  },
-                                ),
-                                ButtonBar(
-                                  children: [
-                                    TextButton(
-                                        child: Text("Cancel"),
-                                        onPressed: () => Get.back()),
-                                    TextButton(
-                                      child: Text("Ok"),
-                                      onPressed: () async {
-                                        Get.back();
+                Get.defaultDialog(
+                    title: "Select Country",
+                    backgroundColor: Theme.of(context).canvasColor,
+                    confirm: TextButton(
+                      child: Text("Ok"),
+                      onPressed: () async {
+                        Get.back();
 
-                                        _controller.callRefresh();
-                                        Map newCovidData = await DataCovid()
-                                            .getData(temporaryCountryIDSlug);
-                                        if (newCovidData != null) {
-                                          _controller.finishRefresh(
-                                              success: true);
-                                          countryName = temporaryCountryName;
-                                          Get.showSnackbar(GetBar(
-                                            title:
-                                                "SUCCESS!, country changed to : $countryName",
-                                            duration:
-                                                Duration(milliseconds: 2500),
-                                            message:
-                                                "Last update : ${newCovidData["latestDate"]}",
-                                          ));
-                                          box.write('countryID',
-                                              temporaryCountryIDSlug);
-                                          box.write('countryName', countryName);
-                                          setState(() {
-                                            _controller.finishRefresh(
-                                                success: true);
-                                            covidData = newCovidData;
-                                          });
-                                        }
-                                      },
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
+                        _controller.callRefresh();
+                        Map newCovidData =
+                            await DataCovid().getData(temporaryCountryIDSlug);
+                        if (newCovidData != null) {
+                          _controller.finishRefresh(success: true);
+                          countryName = temporaryCountryName;
+                          Get.showSnackbar(GetBar(
+                            title:
+                                "SUCCESS!, country changed to : $countryName",
+                            duration: Duration(milliseconds: 1800),
+                            message:
+                                "Last update : ${newCovidData["latestDate"]}",
+                          ));
+                          box.write('countryID', temporaryCountryIDSlug);
+                          box.write('countryName', countryName);
+                          setState(() {
+                            _controller.finishRefresh(success: true);
+                            covidData = newCovidData;
+                          });
+                        }
+                      },
+                    ),
+                    cancel: TextButton(
+                        child: Text("Cancel"), onPressed: () => Get.back()),
+                    content: Container(
+                      color: Theme.of(context).canvasColor,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SearchChoices.single(
+                            menuBackgroundColor: Theme.of(context).canvasColor,
+                            items: allCountryList,
+                            value: countryName,
+                            hint: countryName,
+                            isExpanded: true,
+                            onChanged: (a) {
+                              setState(() {
+                                temporaryCountryIDSlug = a;
+                                temporaryCountryName =
+                                    allCountryItem[countryIndex.indexOf(a)]
+                                        ["Country"];
+                                print(temporaryCountryIDSlug);
+                                print(temporaryCountryName);
+                              });
+                            },
                           ),
-                        ));
+                        ],
+                      ),
+                    ));
               }),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -163,7 +157,7 @@ class HomeScreenState extends State<HomeScreen> {
                       _controller.finishRefresh(success: true);
                       Get.showSnackbar(GetBar(
                         title: "SUCCESS!, country changed to : $newCountryName",
-                        duration: Duration(milliseconds: 2500),
+                        duration: Duration(milliseconds: 2000),
                         message: "Last update : ${newCovidData["latestDate"]}",
                       ));
                       box.write('countryID', newCountryID);
@@ -178,7 +172,7 @@ class HomeScreenState extends State<HomeScreen> {
                   _controller.finishRefresh(success: false);
                   Get.showSnackbar(GetBar(
                     title: "ERROR",
-                    duration: Duration(milliseconds: 2500),
+                    duration: Duration(milliseconds: 2000),
                     message: e.toString(),
                   ));
                 }
@@ -198,7 +192,7 @@ class HomeScreenState extends State<HomeScreen> {
           } else {
             Get.showSnackbar(GetBar(
               title: "ERROR",
-              duration: Duration(milliseconds: 2500),
+              duration: Duration(milliseconds: 1800),
               message: "Check your internet connection",
             ));
           }
@@ -242,6 +236,9 @@ class HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class HomeContainerLarge extends StatelessWidget {
@@ -252,38 +249,15 @@ class HomeContainerLarge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 18),
+      padding: EdgeInsets.symmetric(
+          vertical: ScreenUtil().setHeight(8.0),
+          horizontal: ScreenUtil().setWidth(18.0)),
       child: Container(
-        width: 382,
-        height: 180,
+        width: ScreenUtil().setWidth(382),
+        height: ScreenUtil().setHeight(180),
         decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
             borderRadius: BorderRadius.circular(18)),
-      ),
-    );
-  }
-}
-
-class HomeContainerLargeLoading extends StatelessWidget {
-  const HomeContainerLargeLoading({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 18),
-      child: Container(
-        width: 382,
-        height: 180,
-        decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            borderRadius: BorderRadius.circular(18)),
-        child: Container(
-          width: 350,
-          height: 150,
-          color: Colors.green,
-        ),
       ),
     );
   }

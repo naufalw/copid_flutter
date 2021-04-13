@@ -1,5 +1,3 @@
-import "package:dio/dio.dart";
-
 getData() async {
   // var dio = Dio();
   // var request = await dio.get("https://api.covid19api.com/countries");

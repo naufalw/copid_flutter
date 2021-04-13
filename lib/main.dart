@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: Size(1440, 3040),
+      designSize: Size(411.42857142857144, 820.5714285714286),
       builder: () => GetMaterialApp(
         title: 'Copid App',
         themeMode: ThemeMode.dark,

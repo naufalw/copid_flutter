@@ -1,5 +1,7 @@
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
+import 'package:copid_flutter/components/font_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
 class HomeContainerSmall extends StatelessWidget {
@@ -20,8 +22,8 @@ class HomeContainerSmall extends StatelessWidget {
         shimmerColor: Colors.grey,
         borderRadius: BorderRadius.circular(18),
         child: Container(
-          height: 45,
-          width: 150,
+          height: ScreenUtil().setHeight(25),
+          width: ScreenUtil().setWidth(75),
           decoration: BoxDecoration(
               color: Colors.grey[300], borderRadius: BorderRadius.circular(18)),
         ),
@@ -41,8 +43,8 @@ class HomeContainerSmall extends StatelessWidget {
         shimmerColor: Colors.grey,
         borderRadius: BorderRadius.circular(18),
         child: Container(
-          height: 15,
-          width: 80,
+          height: ScreenUtil().setHeight(7),
+          width: ScreenUtil().setWidth(40),
           decoration: BoxDecoration(
               color: Colors.grey[300], borderRadius: BorderRadius.circular(18)),
         ),
@@ -51,7 +53,8 @@ class HomeContainerSmall extends StatelessWidget {
       return AutoSizeText(
         delta,
         maxLines: 1,
-        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+        style: TextStyle(
+            fontWeight: FontWeight.w900, fontSize: FontSize.fontSize15),
       );
     }
   }
@@ -59,7 +62,9 @@ class HomeContainerSmall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(
+          vertical: ScreenUtil().setHeight(8.0),
+          horizontal: ScreenUtil().setWidth(8.0)),
       child: Container(
         width: 180,
         height: 122,
@@ -67,14 +72,17 @@ class HomeContainerSmall extends StatelessWidget {
             color: Theme.of(context).canvasColor,
             borderRadius: BorderRadius.circular(18)),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.symmetric(
+              vertical: ScreenUtil().setHeight(8.0),
+              horizontal: ScreenUtil().setWidth(8.0)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               AutoSizeText(
                 title,
                 maxLines: 1,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17.5),
+                style: TextStyle(
+                    fontWeight: FontWeight.w700, fontSize: FontSize.fontSize18),
               ),
               getValueText(),
               getDeltaText()
