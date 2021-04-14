@@ -1,6 +1,10 @@
+import 'package:copid_flutter/constants.dart';
 import 'package:copid_flutter/screens/home_screen.dart';
 import 'package:copid_flutter/screens/news_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:line_icons/line_icons.dart';
 
 class MainScreen extends StatefulWidget {
@@ -18,12 +22,27 @@ class _MainScreenState extends State<MainScreen> {
   int _currentIndex;
   List<Widget> screenIndex;
   PageController _pageController;
+
+  void getThemeMode() async {
+    final box = GetStorage();
+    String _themeMode = box.read("themeMode");
+
+    if (_themeMode == "light") {
+      await FlutterStatusbarcolor.setNavigationBarColor(kPrimaryLightColor);
+    } else if (_themeMode == "dark") {
+      await FlutterStatusbarcolor.setNavigationBarColor(kPrimaryDarkColor);
+    } else if (_themeMode == "same") {
+      await FlutterStatusbarcolor.setNavigationBarColor(Colors.black);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     screenIndex = [HomeScreen(), NewsScreen()];
     _currentIndex = 0;
     _pageController = PageController(initialPage: _currentIndex);
+    getThemeMode();
   }
 
   @override

@@ -148,7 +148,7 @@ List allCountryItem = [
   {"Country": "Iceland", "Slug": "iceland", "ISO2": "IS"},
   {"Country": "India", "Slug": "india", "ISO2": "IN"},
   {"Country": "Indonesia", "Slug": "indonesia", "ISO2": "ID"},
-  {"Country": "Iran, Islamic Republic of", "Slug": "iran", "ISO2": "IR"},
+  {"Country": "Iran", "Slug": "iran", "ISO2": "IR"},
   {"Country": "Iraq", "Slug": "iraq", "ISO2": "IQ"},
   {"Country": "Ireland", "Slug": "ireland", "ISO2": "IE"},
   {"Country": "Isle of Man", "Slug": "isle-of-man", "ISO2": "IM"},
@@ -188,11 +188,7 @@ List allCountryItem = [
   {"Country": "Mauritius", "Slug": "mauritius", "ISO2": "MU"},
   {"Country": "Mayotte", "Slug": "mayotte", "ISO2": "YT"},
   {"Country": "Mexico", "Slug": "mexico", "ISO2": "MX"},
-  {
-    "Country": "Micronesia, Federated States of",
-    "Slug": "micronesia",
-    "ISO2": "FM"
-  },
+  {"Country": "Micronesia", "Slug": "micronesia", "ISO2": "FM"},
   {"Country": "Moldova", "Slug": "moldova", "ISO2": "MD"},
   {"Country": "Monaco", "Slug": "monaco", "ISO2": "MC"},
   {"Country": "Mongolia", "Slug": "mongolia", "ISO2": "MN"},
